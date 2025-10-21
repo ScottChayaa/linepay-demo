@@ -1,0 +1,38 @@
+### REST Client 測試文件
+### 使用方式：安裝 VS Code 的 REST Client 擴充套件，然後點擊 "Send Request"
+
+### 變數設定
+@baseUrl = http://localhost:4000
+@contentType = application/json
+
+### ============================================
+### 測試根路由
+### ============================================
+GET {{baseUrl}}/
+
+
+### ============================================
+### GET 測試 - URL params 和 query params
+### ============================================
+
+### URL params + query params
+GET {{baseUrl}}/api/users/456?name=John&age=30
+
+
+### ============================================
+### POST 測試 - Body 參數
+### ============================================
+
+### 多欄位的 POST 請求
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "name": "Alice Wang",
+  "email": "alice@example.com",
+  "age": 25,
+  "city": "Taipei",
+  "role": "developer",
+  "skills": ["JavaScript", "Node.js", "React"]
+}
+

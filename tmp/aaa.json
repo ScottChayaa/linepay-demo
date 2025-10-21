@@ -1,0 +1,12 @@
+{
+  "returnCode": "0000",
+  "returnMessage": "Success.",
+  "info": {
+    "paymentUrl": {
+      "web": "https://sandbox-web-pay.line.me/web/payment/wait?transactionReserveId=MWtZNmFyQTIwbEZRTkZITDRINzZlQjBiUm8zSklBSk9MbUczanV4S2VlSkJiODk2am96Y1lrMmd3T3ljbVVvSg",
+      "app": "line://pay/payment/MWtZNmFyQTIwbEZRTkZITDRINzZlQjBiUm8zSklBSk9MbUczanV4S2VlSkJiODk2am96Y1lrMmd3T3ljbVVvSg"
+    },
+    "transactionId": 2025102102310487910,
+    "paymentAccessToken": "812479631952"
+  }
+}

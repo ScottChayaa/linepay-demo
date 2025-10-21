@@ -1,0 +1,24 @@
+### REST Client 測試文件
+### 使用方式：安裝 VS Code 的 REST Client 擴充套件，然後點擊 "Send Request"
+
+### 變數設定
+@baseUrl = https://sandbox-api-pay.line.me/v3
+@contentType = application/json
+@ChannelId = 2008325625
+@ChannelSecret = d2ea266655e7516d1f673aa6ba750072
+
+
+POST {{baseUrl}}/payments/request
+Content-Type: {{contentType}}
+X-LINE-ChannelId:{{ChannelId}}
+X-LINE-ChannelSecret:{{ChannelSecret}}
+
+{
+  "amount": 100,
+	"productName": "ithome",
+	"productImageUrl": "https://ithelp.ithome.com.tw/images/ironman/11th/event/kv_event/kv-bg-addfly.png",
+	"confirmUrl": "http://127.0.0.1:4000",
+	"orderId": "B858CB282617FB0956D960215C8E84D1CCF909C6",
+	"currency": "TWD"
+}
+
