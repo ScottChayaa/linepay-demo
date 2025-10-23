@@ -10,5 +10,7 @@ router.get('/test/hello', TestController.hello);
 // 公開
 router.get('/', IndexController.index);
 router.get('/payments/request', IndexController.requestPayments);
+router.get('/confirmUrl', IndexController.confirmUrl);
+router.get('/payments', IndexController.searchPayments);
 
 module.exports = router;

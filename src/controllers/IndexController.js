@@ -80,7 +80,7 @@ class IndexController {
     res.json(result_json_confirm);
   };
 
-  confirmUrl = async (req, res) => {
+  searchPayments = async (req, res) => {
     var transactionId = req.query.transactionId;
     var orderId = req.query.orderId;
 
