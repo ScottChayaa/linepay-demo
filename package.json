@@ -1,11 +1,11 @@
 {
-  "name": "express-demo",
+  "name": "linepay-demo",
   "version": "1.0.0",
-  "description": "Simple Express server with GET and POST examples",
-  "main": "server.js",
+  "description": "Simple LINE Pay examples",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node src/index.js",
+    "dev": "node src/index.js"
   },
   "keywords": [
     "express",
@@ -14,9 +14,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
+    "dotenv": "^17.0.1",
+    "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "module-alias": "^2.2.3",
     "moment": "^2.30.1",
-    "uuid4": "^2.0.3"
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "node-input-validator": "^4.5.1"
+  },
+  "_moduleAliases": {
+    "@": "src"
   }
 }
