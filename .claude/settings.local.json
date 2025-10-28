@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(test:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: 重構付款頁面結構，新增線上與實體付款功能\n\n- 將原 index.html 重新命名為 onlineshop.html (LINE Pay 線上付款)\n- 新增 index.html 作為導覽首頁，提供兩種付款方式選擇\n- 新增 offlineshop.html 實體付款(掃碼)頁面\n  - 支援 OneTimeKey 輸入驗證\n  - 只有輸入框有值時按鈕才啟用\n  - API 成功後自動清空輸入框\n  - 呼叫 GET /offline/pay?oneTimeKey=xxx\n- 優化使用者體驗與介面設計\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git config:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
