@@ -1,6 +1,6 @@
 const moment = require('moment');
 const logger = require("@/helpers/Logger");
-const LinePayRequest = require("@/helpers/LinePayRequest");
+const LinePay = require("@/helpers/LinePay");
 const config = require('@/configs/config');
 
 const checkout_amount = 500; // 結帳金額
@@ -20,7 +20,7 @@ class OnlineShopController {
    * 
    */
   requestPayments = async (req, res) => {
-    var response = await LinePayRequest({
+    var response = await LinePay.requestOnline({
       method: "POST",
       apiPath: "/v3/payments/request",
       queryString: "",
@@ -70,9 +70,9 @@ class OnlineShopController {
   confirmUrl = async (req, res) => {
     var transactionId = req.query.transactionId;
     var orderId = req.query.orderId;
-    var orderAmount = await getOrderAmount(orderId); // 實務上, 會根據 orderId 查詢資料庫中的訂單金額
+    var orderAmount = await this.getOrderAmount(orderId); // 實務上, 會根據 orderId 查詢資料庫中的訂單金額
 
-    var response_confirm = await LinePayRequest({
+    var response_confirm = await LinePay.requestOnline({
       method: "POST",
       apiPath: `/v3/payments/${transactionId}/confirm`, // (店家)請求付款授權
       data: {
@@ -94,7 +94,7 @@ class OnlineShopController {
     var transactionId = req.query.transactionId;
     var orderId = req.query.orderId;
 
-    var response = await LinePayRequest({
+    var response = await LinePay.requestOnline({
       method: "GET",
       apiPath: `/v3/payments`, // 查詢付款明細
       queryString: `transactionId=${transactionId}&orderId=${orderId}`,

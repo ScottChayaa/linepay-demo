@@ -1,6 +1,7 @@
 require('module-alias/register');
 require('express-async-errors');
 
+const path = require('path');
 const express = require('express');
 
 const router_public = require('@/routers/public');
@@ -12,6 +13,7 @@ const logger = require('@/helpers/Logger');
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(ExtendRequestMiddleware);
 

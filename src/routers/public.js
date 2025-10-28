@@ -1,6 +1,7 @@
 const express = require('express');
 var TestController = require('@/controllers/TestController');
 var OnlineShopController = require('@/controllers/OnlineShopController');
+var OfflineShopController = require('@/controllers/OfflineShopController');
 
 var router = express.Router();
 
@@ -11,5 +12,7 @@ router.get('/test', TestController.index);
 router.get('/payments/request', OnlineShopController.requestPayments);
 router.get('/confirmUrl', OnlineShopController.confirmUrl);
 router.get('/payments', OnlineShopController.searchPayments);
+
+router.get('/offline/pay', OfflineShopController.pay);
 
 module.exports = router;

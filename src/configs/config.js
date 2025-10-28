@@ -56,7 +56,22 @@ var config = {
    */
   LINE_CHANNEL_SECRET: process.env.LINE_CHANNEL_SECRET ?? '',
 
+  /**
+   * Sandbox server (for tests): sandbox-api-pay.line.me
+   * 
+   * Production server (for actual service): api-pay.line.me
+   */
   LINE_PAY_BASE_URL: 'https://sandbox-api-pay.line.me',
+
+  /**
+   * (optional)
+   */
+  LINE_DEVICE_PROFILE_ID: '',
+
+  /**
+   * (optional)
+   */
+  LINE_DEVICE_TYPE: '',
 };
 
 module.exports = config;
