@@ -2,7 +2,7 @@ const winston = require('winston');
 const moment = require('moment');
 
 const logger = winston.createLogger({
-  level: 'info',
+  level: 'debug', // 調整 log level 顯示層級
   format: winston.format.combine(
     winston.format.timestamp({
       format: () => moment().format('YYYY-MM-DD HH:mm:ss.SSS'), // 自訂時間格式

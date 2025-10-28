@@ -1,21 +1,23 @@
 const moment = require('moment');
 const logger = require("@/helpers/Logger");
 const LinePayRequest = require("@/helpers/LinePayRequest");
-const checkout_amount = 500;
+const config = require('@/configs/config');
 
-class IndexController {
-  index = async (req, res) => {
-    const queryParams = req.query; // 從 URL 查詢字串取得參數
+const checkout_amount = 500; // 結帳金額
 
-    res.json({
-      message: "index",
-      queryParams: queryParams, // { name: 'John', age: '30' }
-    });
-  };
-
+/**
+ * LINE Pay 線上付款
+ * 
+ * https://developers-pay.line.me/zh/online
+ */
+class OnlineShopController {
   /**
-   * 顧客購物車結帳
-   * 店家發起付款請求給 LINE Server
+   * 步驟 1 + 2
+   * 
+   * 1) 付款請求步驟: 顧客購物車結帳, 店家發起付款請求給 LINE Server
+   * 
+   * 2) LINE Pay認證步驟: 在顧客終端機上顯示 LINE Pay，以便顧客可以進行 LINE Pay 認證
+   * 
    */
   requestPayments = async (req, res) => {
     var response = await LinePayRequest({
@@ -42,8 +44,8 @@ class IndexController {
           },
         ],
         redirectUrls: {
-          confirmUrl: "https://8e736eedbd67.ngrok-free.app/confirmUrl",
-          cancelUrl: "https://8e736eedbd67.ngrok-free.app/cancelUrl",
+          confirmUrl: `${config.HOST}/confirmUrl`,
+          cancelUrl:  `${config.HOST}/cancelUrl`,
         },
       },
     });
@@ -57,16 +59,24 @@ class IndexController {
   };
 
   /**
-   * 店家收到 LINE Server 付款callback
+   * 步驟 3 + 4
+   * 
+   * 3) 付款授權步驟: 顧客完成 LINE Pay 認證後, 店家取得付款授權, 可執行接下來的請款或取消授權動作
+   * 
+   * 4) 請款步驟: 付款授權後, 需系統"自動"進行請款處理
+   * 
+   * 店家收到 LINE Server 付款授權 callback 後, 需再發 confirm 動作進行請款才算完成
    */
   confirmUrl = async (req, res) => {
     var transactionId = req.query.transactionId;
+    var orderId = req.query.orderId;
+    var orderAmount = await getOrderAmount(orderId); // 實務上, 會根據 orderId 查詢資料庫中的訂單金額
 
-    var response_confirm = await requestOnlineAPI({
+    var response_confirm = await LinePayRequest({
       method: "POST",
       apiPath: `/v3/payments/${transactionId}/confirm`, // (店家)請求付款授權
       data: {
-        amount: checkout_amount,
+        amount: orderAmount,
         currency: "TWD",
       },
     });
@@ -84,19 +94,24 @@ class IndexController {
     var transactionId = req.query.transactionId;
     var orderId = req.query.orderId;
 
-    var response = await requestOnlineAPI({
+    var response = await LinePayRequest({
       method: "GET",
       apiPath: `/v3/payments`, // 查詢付款明細
       queryString: `transactionId=${transactionId}&orderId=${orderId}`,
     });
 
-    console.log(response);
+    logger.debug(response);
 
     var result_json = await response.json();
-    console.log(result_json);
+    logger.debug(result_json);
 
     res.json(result_json);
   };
+
+  getOrderAmount = async (orderId) => {
+    // TODO: 查詢訂單金額
+    return checkout_amount;
+  }
 }
 
-module.exports = new IndexController();
+module.exports = new OnlineShopController();

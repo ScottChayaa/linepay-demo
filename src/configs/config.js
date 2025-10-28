@@ -7,6 +7,11 @@ var config = {
   PORT: process.env.PORT ?? '',
 
   /**
+   * 主機服務位置
+   */
+  HOST: process.env.HOST ?? '',
+
+  /**
    * 應用程式名稱
    */
   APP_NAME: process.env.APP_NAME ?? '',

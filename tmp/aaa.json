@@ -1,12 +1,16 @@
 {
-  "returnCode": "0000",
-  "returnMessage": "Success.",
-  "info": {
-    "paymentUrl": {
-      "web": "https://sandbox-web-pay.line.me/web/payment/wait?transactionReserveId=MWtZNmFyQTIwbEZRTkZITDRINzZlQjBiUm8zSklBSk9MbUczanV4S2VlSkJiODk2am96Y1lrMmd3T3ljbVVvSg",
-      "app": "line://pay/payment/MWtZNmFyQTIwbEZRTkZITDRINzZlQjBiUm8zSklBSk9MbUczanV4S2VlSkJiODk2am96Y1lrMmd3T3ljbVVvSg"
-    },
-    "transactionId": 2025102102310487910,
-    "paymentAccessToken": "812479631952"
+  "timestamp": "2025-10-28 11:52:37.189",
+  "level": "debug",
+  "message": {
+    "returnCode": "0000",
+    "returnMessage": "Success.",
+    "info": {
+      "paymentUrl": {
+        "web": "https://sandbox-web-pay.line.me/web/payment/wait?transactionReserveId=VG5UdDFIQ2lhNmVRaEU3UFlHUy8wQTNXcElXa0ZpMSs2cjNHVXdiQ2JCeDRmVEZwenFCVVREQzE3clZUT25HSA",
+        "app": "line://pay/payment/VG5UdDFIQ2lhNmVRaEU3UFlHUy8wQTNXcElXa0ZpMSs2cjNHVXdiQ2JCeDRmVEZwenFCVVREQzE3clZUT25HSA"
+      },
+      "transactionId": 2025102802311476700,
+      "paymentAccessToken": "129506574398"
+    }
   }
 }
