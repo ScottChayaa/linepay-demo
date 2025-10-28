@@ -3,147 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LINE PAY 線上付款</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>LINE PAY 付款示範</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
             text-align: center;
         }
-        h4 {
+        h1 {
             color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
+            font-size: 32px;
         }
-        img {
-            display: block;
-            margin: 0 auto 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        button {
-            background-color: #00B900;
-            color: white;
-            border: none;
-            padding: 12px 40px;
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
             font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-bottom: 20px;
         }
-        button:hover {
-            background-color: #009900;
+        .link-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        textarea {
-            width: 100%;
-            min-height: 200px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 12px;
-            resize: vertical;
-        }
-        .product-info {
-            margin: 20px 0 30px;
-        }
-        .product-name {
-            font-size: 20px;
+        .link-card {
+            background: linear-gradient(135deg, #00B900 0%, #009900 100%);
+            color: white;
+            text-decoration: none;
+            padding: 25px 30px;
+            border-radius: 12px;
+            font-size: 18px;
             font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,185,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        .product-price {
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,185,0,0.4);
+        }
+        .link-card:active {
+            transform: translateY(-2px);
+        }
+        .link-card.offline {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+        }
+        .link-card.offline:hover {
+            box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+        }
+        .icon {
             font-size: 24px;
-            color: #E60012;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h4>LINE PAY 線上付款</h4>
+    <div class="container">
+        <h1>LINE PAY 付款示範</h1>
+        <p class="subtitle">請選擇付款方式</p>
 
-    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-model-unselect-gallery-2-202509?wid=5120&hei=2880&fmt=webp&qlt=90&.v=dU9qRExIQUlQTzVKeDd1V1dtUE1MUWFRQXQ2R0JQTk5udUZxTkR3ZVlpTEVqWElVVkRpc1V5YU5kb3VzUVZndzBoUVhuTWlrY2hIK090ZGZZbk9HeEJWb1BiTjRORlc1Y1lKU3JWempySktQVFcxaWdDV1ZRTjhLQ2h5TEk5bUxmbW94YnYxc1YvNXZ4emJGL0IxNFp3&traceId=1"
-         width="300"
-         alt="iPhone 17 Pro">
+        <div class="link-container">
+            <a href="./onlineshop.html" class="link-card">
+                <span class="icon">💳</span>
+                LINE Pay 線上付款
+            </a>
 
-    <div class="product-info">
-        <div class="product-name">買不起的 iphone 17</div>
-        <div class="product-price">NTD 500</div>
+            <a href="./offlineshop.html" class="link-card offline">
+                <span class="icon">📱</span>
+                LINE Pay 實體付款(掃碼)
+            </a>
+        </div>
     </div>
-
-    <button id="payButton" onclick="handlePayment()">線上付款</button>
-
-    <textarea id="responseArea" placeholder="API 回應將顯示在這裡..."></textarea>
-
-    <script>
-        async function handlePayment() {
-            const button = document.getElementById('payButton');
-            const textarea = document.getElementById('responseArea');
-
-            try {
-                button.disabled = true;
-                button.textContent = '處理中...';
-                textarea.value = '正在呼叫 API...\n';
-
-                const response = await axios.get('/payments/request');
-
-                textarea.value += '\n成功!\n\n';
-                textarea.value += JSON.stringify(response.data, null, 2);
-
-                // 取得付款網址
-                const paymentUrl = response.data?.info?.paymentUrl?.web;
-
-                if (paymentUrl) {
-                    // 顯示倒數跳轉訊息
-                    let timerInterval;
-                    await Swal.fire({
-                        title: '正為您導向線上付款頁面',
-                        html: '將在 <b>3</b> 秒後跳轉...',
-                        timer: 3000,
-                        timerProgressBar: true,
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        allowEnterKey: false,
-                        showConfirmButton: false,
-                        backdrop: `
-                            rgba(0,0,0,0.9)
-                        `,
-                        didOpen: () => {
-                            const timer = Swal.getPopup().querySelector('b');
-                            timerInterval = setInterval(() => {
-                                const timeLeft = Math.ceil(Swal.getTimerLeft() / 1000);
-                                timer.textContent = timeLeft;
-                            }, 100);
-                        },
-                        willClose: () => {
-                            clearInterval(timerInterval);
-                        }
-                    });
-
-                    // 跳轉到付款頁面
-                    window.location.href = paymentUrl;
-                }
-
-            } catch (error) {
-                textarea.value += '\n錯誤!\n\n';
-                if (error.response) {
-                    textarea.value += JSON.stringify(error.response.data, null, 2);
-                } else {
-                    textarea.value += error.message;
-                }
-            } finally {
-                button.disabled = false;
-                button.textContent = '線上付款';
-            }
-        }
-    </script>
 </body>
 </html>

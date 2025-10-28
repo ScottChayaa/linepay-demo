@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE PAY 實體付款(掃碼)</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h4 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        img {
+            display: block;
+            margin: 0 auto 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .product-info {
+            margin: 20px 0 30px;
+        }
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .product-price {
+            font-size: 24px;
+            color: #E60012;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+            text-align: left;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        button:hover:not(:disabled) {
+            background-color: #5568d3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            resize: vertical;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h4>LINE PAY 實體付款(掃碼)</h4>
+
+    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-model-unselect-gallery-2-202509?wid=5120&hei=2880&fmt=webp&qlt=90&.v=dU9qRExIQUlQTzVKeDd1V1dtUE1MUWFRQXQ2R0JQTk5udUZxTkR3ZVlpTEVqWElVVkRpc1V5YU5kb3VzUVZndzBoUVhuTWlrY2hIK090ZGZZbk9HeEJWb1BiTjRORlc1Y1lKU3JWempySktQVFcxaWdDV1ZRTjhLQ2h5TEk5bUxmbW94YnYxc1YvNXZ4emJGL0IxNFp3&traceId=1"
+         width="300"
+         alt="iPhone 17 Pro">
+
+    <div class="product-info">
+        <div class="product-name">買不起的 iphone 17</div>
+        <div class="product-price">NTD 500</div>
+    </div>
+
+    <div class="input-group">
+        <label for="oneTimeKey">OneTimeKey (一次性金鑰)</label>
+        <input type="text"
+               id="oneTimeKey"
+               placeholder="請輸入 OneTimeKey..."
+               oninput="toggleButton()">
+    </div>
+
+    <button id="payButton" onclick="handlePayment()" disabled>實體付款(掃碼)</button>
+
+    <textarea id="responseArea" placeholder="API 回應將顯示在這裡..."></textarea>
+
+    <a href="./" class="back-link">← 返回首頁</a>
+
+    <script>
+        function toggleButton() {
+            const input = document.getElementById('oneTimeKey');
+            const button = document.getElementById('payButton');
+            button.disabled = !input.value.trim();
+        }
+
+        async function handlePayment() {
+            const button = document.getElementById('payButton');
+            const textarea = document.getElementById('responseArea');
+            const input = document.getElementById('oneTimeKey');
+            const oneTimeKey = input.value.trim();
+
+            if (!oneTimeKey) {
+                textarea.value = '錯誤: 請輸入 OneTimeKey';
+                return;
+            }
+
+            try {
+                button.disabled = true;
+                button.textContent = '處理中...';
+                textarea.value = '正在呼叫 API...\n';
+
+                const response = await axios.get(`/offline/pay?oneTimeKey=${encodeURIComponent(oneTimeKey)}`);
+
+                textarea.value += '\n成功!\n\n';
+                textarea.value += JSON.stringify(response.data, null, 2);
+
+                // 成功後清空輸入框
+                input.value = '';
+                toggleButton();
+
+            } catch (error) {
+                textarea.value += '\n錯誤!\n\n';
+                if (error.response) {
+                    textarea.value += JSON.stringify(error.response.data, null, 2);
+                } else {
+                    textarea.value += error.message;
+                }
+            } finally {
+                button.disabled = false;
+                button.textContent = '實體付款(掃碼)';
+            }
+        }
+
+        // 支援 Enter 鍵提交
+        document.getElementById('oneTimeKey').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' && !document.getElementById('payButton').disabled) {
+                handlePayment();
+            }
+        });
+    </script>
+</body>
+</html>
